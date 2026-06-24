@@ -1,0 +1,57 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --white: #FFFFFF;
+  --blush: #F7E9E6;
+  --blush-deep: #EDD0CB;
+  --rose: #C17B72;
+  --rose-deep: #A8584C;
+  --grey: #cdcdcd;
+  --ink: #2B2422;
+  --ink-soft: #6B5D58;
+  --ink-faint: #A99892;
+  --line: #EDE2DE;
+  --line-strong: #D9C2BC;
+  --delete: #c0392b;
+  --font-display: 'Italiana', serif;
+  --font-accent: 'Cormorant', serif;
+  --font-body: 'Jost', sans-serif;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 999px;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--white);
+  color: var(--ink);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+select,
+button {
+  font-family: var(--font-body);
+}
