@@ -10,8 +10,7 @@ app.post('/api/search', async (req, res) => {
   try {
     const result = await runSearch(req.body, {
       GROQ_API_KEY: process.env.GROQ_API_KEY,
-      SERPAPI_KEY: process.env.SERPAPI_KEY,
-      ZYTE_API_KEY: process.env.ZYTE_API_KEY
+      SERPAPI_KEY: process.env.SERPAPI_KEY
     });
     res.status(200).json(result);
   } catch (err) {

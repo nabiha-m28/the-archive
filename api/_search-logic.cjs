@@ -139,7 +139,7 @@ async function fetchShoppingResults(searchQuery, coreQuery, apiKey, priceFilter,
     });
 
     if (shoppingResults.length === 0) {
-        throw new Error('SerpAPI returned no results');
+        throw new Error("We couldn't find any matches right now. Try a different search.");
     }
 
     console.log(`[search] Raw SerpAPI results: ${shoppingResults.length}`);
