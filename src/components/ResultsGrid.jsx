@@ -38,16 +38,6 @@ export default function ResultsGrid({ results, onReset, isSaved, onSave, onRemov
         <div className="header-right">
           <select
             className="sort-select"
-            value={sort}
-            onChange={e => setSort(e.target.value)}
-          >
-            <option value="featured">Featured</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-          </select>
-
-          <select
-            className="sort-select"
             value={price}
             onChange={e => setPrice(e.target.value)}
           >
@@ -56,6 +46,16 @@ export default function ResultsGrid({ results, onReset, isSaved, onSave, onRemov
             <option>Under $200</option>
             <option>Under $500</option>
             <option>Under $1,000</option>
+          </select>
+
+          <select
+            className="sort-select"
+            value={sort}
+            onChange={e => setSort(e.target.value)}
+          >
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
           </select>
         </div>
       </div>

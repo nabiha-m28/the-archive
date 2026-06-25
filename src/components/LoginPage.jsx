@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { signIn, signUp } from '../lib/auth';
+import '../App.css'
 
 function LoginPage({ onClose }) {
   const [email, setEmail] = useState('');

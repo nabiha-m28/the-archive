@@ -1,7 +1,20 @@
 import ItemCard from './ItemCard'
 import '../App.css'
 
-export default function Wishlist({ wishlist, isSaved, onSave, onRemove, onClear }) {
+export default function Wishlist({ wishlist, isSaved, onSave, onRemove, onClear, user, onGoToSearch }) {
+  if (!user) {
+    return (
+      <section className="section">
+        <div className="empty">
+          <p className="empty-title">Log In to view your wishlist</p>
+          <button className="search-btn" onClick={onGoToSearch} style={{ marginTop: '1.5rem', maxWidth: '200px' }}>
+            Go to Search
+          </button>
+        </div>
+      </section>
+    )
+  }
+  
   if (wishlist.length === 0) {
     return (
       <section className="section">

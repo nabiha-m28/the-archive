@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import SearchCard from './components/SearchCard'
 import ResultsGrid from './components/ResultsGrid'
@@ -28,6 +28,23 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  useEffect(() => {
+    if (view === 'wishlist') {
+      window.history.pushState(null, '', window.location.href)
+    }
+  }, [view])
+
+  useEffect(() => {
+    const handlePopState = () => {
+      if (view === 'wishlist') {
+        setView('search')
+        window.scrollTo({ top: 0, behavior: 'instant' })
+      }
+    }
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [view])
+
   return (
     <>
       <Header
@@ -56,6 +73,11 @@ export default function App() {
               onSave={addItem}
               onRemove={removeItem}
               onClear={clearAll}
+              user={user}
+              onGoToSearch={() => {
+                setView('search')
+                window.scrollTo({ top: 0, behavior: 'instant' })
+              }}
             />
           </div>
         ) : (

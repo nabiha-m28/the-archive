@@ -25,7 +25,7 @@ export default function Header({ wishlistCount, onWishlistClick, activeView, onL
             </>
           ) : (
             <button className="login-btn" onClick={onLoginClick}>
-              Sign in
+              Log In
             </button>
           )}
         </nav>

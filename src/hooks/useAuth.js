@@ -6,13 +6,20 @@ export function useAuth() {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setUser(session?.user ?? null)
+        supabase.auth.getSession().then(({ data: { session }, error }) => {
+            if (error) {
+                console.warn('Session error:', error.message)
+                setUser(null)
+            } else {
+                setUser(session?.user ?? null)
+            }
             setLoading(false)
         })
+
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null)
         })
+
         return () => subscription.unsubscribe()
     }, [])
 
