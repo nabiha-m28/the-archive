@@ -1,4 +1,4 @@
-const ENABLE_DIRECT_LINKS = true;
+const ENABLE_DIRECT_LINKS = false;
 async function runSearch({ description, era, category, price }, keys) {
     const { GROQ_API_KEY, SERPAPI_KEY } = keys;
 
@@ -16,11 +16,19 @@ async function runSearch({ description, era, category, price }, keys) {
         throw err;
     }
 
-    let fullQuery = `${searchQuery}`;
+    const productIdentity = await extractProductIdentity(searchQuery, GROQ_API_KEY) || {};
+
+    const parts = [];
+    if (productIdentity.brand) parts.push(`"${productIdentity.brand}"`);
+    if (productIdentity.model) parts.push(`"${productIdentity.model}"`);
+    if (productIdentity.material) parts.push(productIdentity.material);
+    if (productIdentity.type) parts.push(productIdentity.type);
+
+    let fullQuery = parts.length > 0 ? parts.join(' ') : searchQuery;
     if (era) fullQuery += ` ${era}`;
     if (category) fullQuery += ` ${category}`;
 
-    let listings = await fetchShoppingResults(fullQuery, searchQuery, SERPAPI_KEY, price, GROQ_API_KEY);
+    let listings = await fetchShoppingResults(fullQuery, searchQuery, SERPAPI_KEY, price, GROQ_API_KEY, productIdentity);
 
     const summary = await summarizeFind(searchQuery, GROQ_API_KEY);
 
@@ -95,7 +103,7 @@ const EXCLUDED_RETAIL_NAMES = [
     'harrods'
 ];
 
-async function fetchShoppingResults(searchQuery, coreQuery, apiKey, priceFilter, groqKey) {
+async function fetchShoppingResults(searchQuery, coreQuery, apiKey, priceFilter, groqKey, productIdentity = {}) {
     const PAGES_TO_FETCH = 3;
     const RESULTS_PER_PAGE = 20;
 
@@ -147,7 +155,7 @@ async function fetchShoppingResults(searchQuery, coreQuery, apiKey, priceFilter,
     const resaleOnly = filterToResaleSites(shoppingResults, coreQuery);
     console.log(`[search] After resale-site filter: ${resaleOnly.length}`);
 
-    const relevant = await rankByRelevance(resaleOnly, coreQuery, groqKey);
+    const relevant = await rankByRelevance(resaleOnly, productIdentity.model || coreQuery, groqKey);
     console.log(`[search] After relevance ranking: ${relevant.length}`);
 
     return Promise.all(relevant.map(async (item, i) => ({
@@ -196,7 +204,7 @@ async function rankByRelevance(results, coreQuery, apiKey) {
     For each listing, rate how likely it is to actually be the exact item the shopper is searching for, on a scale of 0-10.
     Score 9-10: brand matches AND the specific named style/variant matches exactly.
     Score 5-7: brand and general item type match, but the specific named variant is different. IMPORTANT: this applies even when listings are clearly from the same product line or collection — e.g. if the query asks for "Basketball Heel" and a listing says "Tennis Ball" or "Baseball" heel from the same brand/seller, that is a DIFFERENT variant, not a match, even though it's obviously a related design. Do not score these as 9-10 just because they share a brand, seller, or general design concept.
-    Score 0-4: different brand, different item type, or only a generic word in common (e.g. matching on "heel" or "shoe" alone is not enough).
+    Score 0-4: different brand, different item type, or only a generic word in common (e.g. matching on "heel" or "shoe" alone is not enough). If model name differs (e.g. Chaos vs Basketball Reworked), score must be ≤4 even if brand matches.
     Be strict about exact variant names when the shopper's query names one specifically.
     Respond with ONLY a comma-separated list of ${candidates.length} numbers, one per listing, in order. Example: 8,1,0,6,9,2...`;
 
@@ -233,7 +241,7 @@ async function rankByRelevance(results, coreQuery, apiKey) {
 
         const scored = candidates
             .map((item, i) => ({ item, score: scores[i] }))
-            .filter(s => s.score >= 5)
+            .filter(s => s.score >= 8)
             .sort((a, b) => b.score - a.score)
             .map(s => s.item);
 
