@@ -1,4 +1,45 @@
 const ENABLE_DIRECT_LINKS = false;
+
+async function extractProductIdentity(description, apiKey) {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: [{
+                role: 'user',
+                content: `
+    Extract structured product info from this fashion search query.
+
+    Return ONLY valid JSON:
+    {
+    "brand": "",
+    "model": "",
+    "type": "",
+    "material": "",
+    "size": ""
+    }
+
+    Query: "${description}"
+    `
+            }]
+        })
+    });
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+
+    try {
+        return JSON.parse(data.choices?.[0]?.message?.content || '{}');
+    } catch {
+        return null;
+    }
+}
+
 async function runSearch({ description, era, category, price }, keys) {
     const { GROQ_API_KEY, SERPAPI_KEY } = keys;
 
