@@ -6,7 +6,7 @@ export default function Wishlist({ wishlist, isSaved, onSave, onRemove, onClear,
     return (
       <section className="section">
         <div className="empty">
-          <p className="empty-title">Log In to view your wishlist</p>
+          <p className="empty-title">Log in to view your wishlist</p>
           <button className="search-btn" onClick={onGoToSearch} style={{ marginTop: '1.5rem', maxWidth: '200px' }}>
             Go to Search
           </button>

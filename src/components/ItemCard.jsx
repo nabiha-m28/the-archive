@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import '../App.css'
 
-export default function ItemCard({ item, isSaved, onSave, onRemove }) {
+export default function ItemCard({ item, isSaved, onSave, onRemove, user, onLoginClick }) {
   const saved = isSaved(item.id)
   const [hovered, setHovered] = useState(false)
 
@@ -16,6 +16,10 @@ export default function ItemCard({ item, isSaved, onSave, onRemove }) {
         <button
           className={`save-btn ${saved ? 'saved' : ''}`}
           onClick={() => {
+            if (!user) {
+              onLoginClick()
+              return
+            }
             if (saved) {
               onRemove(item.id)
             } else {

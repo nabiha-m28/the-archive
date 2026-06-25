@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import ItemCard from './ItemCard'
 import '../App.css'
 
-export default function ResultsGrid({ results, onReset, isSaved, onSave, onRemove }) {
+export default function ResultsGrid({ results, onReset, isSaved, onSave, onRemove, user, onLoginClick }) {
   const [sort, setSort] = useState('featured')
   const [price, setPrice] = useState('')
   const parsePrice = (price) => parseFloat((price || '0').replace(/[$,]/g, '')) || 0
@@ -67,6 +67,8 @@ export default function ResultsGrid({ results, onReset, isSaved, onSave, onRemov
             isSaved={isSaved}
             onSave={onSave}
             onRemove={onRemove}
+            user={user}
+            onLoginClick={onLoginClick}
           />
         ))}
       </div>

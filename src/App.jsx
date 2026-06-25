@@ -123,6 +123,8 @@ export default function App() {
                 isSaved={isSaved}
                 onSave={addItem}
                 onRemove={removeItem}
+                user={user}
+                onLoginClick={() => setShowLogin(true)}
               />
             )}
 
