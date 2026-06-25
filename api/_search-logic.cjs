@@ -282,14 +282,17 @@ async function rankByRelevance(results, coreQuery, apiKey) {
 
         const scored = candidates
             .map((item, i) => ({ item, score: scores[i] }))
-            .filter(s => s.score >= 8)
+            .filter(s => s.score >= 6)
             .sort((a, b) => b.score - a.score)
             .map(s => s.item);
 
         console.log('[rankByRelevance] Top 5 after ranking:',
             scored.slice(0, 5).map((item, i) => `#${i + 1} "${item.title}" (score: ${scores[i]})`));
 
-        return scored.length > 0 ? scored : results;
+        if (scored.length === 0) {
+            throw new Error("No exact matches found");
+        }
+        return scored;
 
     } catch (err) {
         console.error('[rankByRelevance] Unexpected error:', err.message);
