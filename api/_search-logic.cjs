@@ -1,4 +1,4 @@
-const ENABLE_DIRECT_LINKS = false;
+const ENABLE_DIRECT_LINKS = true;
 async function runSearch({ description, era, category, price }, keys) {
     const { GROQ_API_KEY, SERPAPI_KEY } = keys;
 
