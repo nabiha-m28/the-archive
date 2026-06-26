@@ -12,7 +12,7 @@ const EXAMPLES = [
   'Herve Ledger Bandage Dress',
 ]
 
-export default function SearchCard({ onSearch, loading, description, onDescriptionChange }) {
+export default function SearchCard({ onSearch, loading, description, onDescriptionChange, onClearResults }) {
   const [tab, setTab] = useState('text')
   const [imageFile, setImageFile] = useState(null)
   const [imageBase64, setImageBase64] = useState(null)
@@ -25,6 +25,25 @@ export default function SearchCard({ onSearch, loading, description, onDescripti
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [typed, setTyped] = useState('');
   const [isFocused, setIsFocused] = useState(false)
+
+  const handleClear = () => {
+    onDescriptionChange('');
+    setImageFile(null);
+    setImageBase64(null);
+    setEra('');
+    setCategory('');
+    setPrice('');
+
+    setHasSearched(false);
+
+    onClearResults?.();
+
+    if (fileRef.current) fileRef.current.value = '';
+  };
+
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const showClear = hasSearched && !loading;
 
   const handleFile = (file) => {
     if (!file || !file.type.startsWith('image/')) return
@@ -50,6 +69,7 @@ export default function SearchCard({ onSearch, loading, description, onDescripti
   const handleSubmit = () => {
     if (tab === 'text' && !description.trim()) return
     if (tab === 'image' && !imageBase64) return
+    setHasSearched(true);
     onSearch({ description: tab === 'text' ? description : '', imageBase64, mediaType, era, category, price })
   }
 
@@ -130,14 +150,13 @@ export default function SearchCard({ onSearch, loading, description, onDescripti
               <SearchIcon />
             </button>
           </div>
-        </div>
-      )}
 
-      {tab === 'image' && (
-        <button className="search-btn" onClick={handleSubmit} disabled={loading}>
-          <SearchIcon />
-          {loading ? 'Searching…' : 'Search the archive'}
-        </button>
+          {showClear && (
+            <button className="clear-search-btn" onClick={handleClear}>
+              Clear Search
+            </button>
+          )}
+        </div>
       )}
     </div>
   )

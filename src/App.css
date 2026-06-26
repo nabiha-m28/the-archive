@@ -576,10 +576,10 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-background: var(--white);
-border-radius: var(--radius-lg);
-padding: 12px;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .img-placeholder {
@@ -795,14 +795,6 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   color: #3a3228;
 }
 
-.search-card {
-  background: var(--white);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 2.25rem;
-  width: 720px;
-}
-
 .tabs {
   display: flex;
   justify-content: center;
@@ -832,10 +824,6 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   opacity: 0.6;
 }
 
-.panel {
-  margin-bottom: 1.5rem;
-}
-
 .field-label {
   display: block;
   font-family: var(--font-accent);
@@ -843,6 +831,18 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-size: 16px;
   color: var(--rose-deep);
   margin-bottom: 10px;
+}
+
+.search-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 2rem 2.25rem 4rem 2.25rem;
+  width: 720px;
+}
+
+.panel {
+  position: relative;
 }
 
 .search-input-row {
@@ -930,6 +930,22 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 .submit-btn:disabled {
   opacity: 0.4;
   cursor: default;
+}
+
+.clear-search-btn {
+  background: transparent;
+  border: none;
+  color: #777;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  right: 5px;
+  top: 95px;
+  position: absolute;
+}
+
+.clear-search-btn:hover {
+  color: #111;
 }
 
 .pills {

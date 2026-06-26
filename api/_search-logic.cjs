@@ -1,4 +1,4 @@
-const ENABLE_DIRECT_LINKS = false;
+const ENABLE_DIRECT_LINKS = true;
 
 async function extractProductIdentity(description, apiKey) {
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -290,11 +290,14 @@ async function rankByRelevance(results, coreQuery, apiKey) {
             scored.slice(0, 5).map((item, i) => `#${i + 1} "${item.title}" (score: ${scores[i]})`));
 
         if (scored.length === 0) {
-            throw new Error("No exact matches found");
+            const noMatchErr = new Error("No exact matches found. Try rephrasing your search or being less specific.");
+            noMatchErr.status = 404;
+            throw noMatchErr;
         }
         return scored;
 
     } catch (err) {
+        if (err.status === 404) throw err; // let it bubble up
         console.error('[rankByRelevance] Unexpected error:', err.message);
         return results;
     }
